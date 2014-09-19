@@ -5,9 +5,12 @@
 # :Licenza:   GNU General Public License version 3 or later
 #
 
+from sqlalchemy import create_engine
+
 from sqlalchemy.ext.declarative import (
     declarative_base,
     DeferredReflection)
+
 from sqlalchemy.orm import (
     object_session,
     scoped_session,
@@ -55,8 +58,31 @@ class Base(DeferredReflection, _Base):
 
     @classmethod
     def resolve_roots(cls, engine):
-        pass
+        from sqlalchemy import Table, select
+        roots = Table('moz_bookmarks_roots',
+                      cls.metadata,
+                      extend_existing=True,
+                      autoload_replace=False,
+                      autoload=True,
+                      autoload_with=engine)
+        cls._roots = dict(list(engine.execute(select([roots.c.root_name,
+                                                     roots.c.folder_id]))))
 
-# const short TYPE_BOOKMARK = 1;
-# +  const short TYPE_FOLDER = 2;
-# +  const short TYPE_SEPARATOR = 3;
+from .moz_places import Place
+from .moz_bookmarks import (
+    StructureItem,
+    Folder,
+    Separator,
+    Bookmark,
+    Tags,
+    Unfiled,
+    Places,
+    Menu,
+    Toolbar)
+
+def connect(fpath):
+    engine = create_engine("sqlite:///%s" % fpath)
+    Base.prepare(engine)
+    session = sessionmaker(bind=engine)()
+    return engine, session
+

@@ -35,7 +35,7 @@ setup(name='metapensiero.firefox_places',
       zip_safe=False,
       install_requires=[
           'setuptools',
-          # -*- Extra requirements: -*-
+          'sqlalchemy'
       ],
       entry_points="""
       # -*- Entry points: -*-
