@@ -75,6 +75,7 @@ from .moz_bookmarks import (
     Separator,
     Bookmark,
     Tags,
+    Tag,
     Unfiled,
     Places,
     Menu,
