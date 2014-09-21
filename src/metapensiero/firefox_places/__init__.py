@@ -98,9 +98,8 @@ from .moz_bookmarks import (
     Menu,
     Toolbar)
 
-def connect(fpath):
-    engine = create_engine("sqlite:///%s" % fpath)
+def connect(fpath, **kw):
+    engine = create_engine("sqlite:///%s" % fpath, **kw)
     Base.prepare(engine)
     session = sessionmaker(bind=engine)()
     return engine, session
-
