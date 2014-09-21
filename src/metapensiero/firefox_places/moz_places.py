@@ -21,7 +21,7 @@ from sqlalchemy.orm import (
     deferred,
 )
 
-from . import Base
+from . import Base, UTCTimestamp
 
 logger = logging.getLogger(__name__)
 
@@ -52,3 +52,4 @@ class Place(Base):
     """
 
     __tablename__ = 'moz_places'
+    last_visit_date = Column('last_visit_date', UTCTimestamp , nullable=False)

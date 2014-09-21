@@ -68,6 +68,23 @@ class Base(DeferredReflection, _Base):
         cls._roots = dict(list(engine.execute(select([roots.c.root_name,
                                                      roots.c.folder_id]))))
 
+import datetime, time
+from sqlalchemy.types import TypeDecorator, Integer
+
+class UTCTimestamp(TypeDecorator):
+    impl = Integer
+
+    divider = 1000000.0
+
+    epoch = datetime.datetime(1970, 1, 1, 0, 0, 0)
+
+    def process_bind_param(self, value, dialect):
+        return int((value - self.epoch).total_seconds() * self.divider)
+
+    def process_result_value(self, value, dialect):
+        return datetime.datetime.utcfromtimestamp(value / self.divider)
+
+
 from .moz_places import Place
 from .moz_bookmarks import (
     StructureItem,

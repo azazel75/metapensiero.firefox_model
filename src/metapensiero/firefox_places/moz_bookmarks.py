@@ -32,7 +32,7 @@ from sqlalchemy.ext.declarative import (
     declared_attr
 )
 
-from . import Base
+from . import Base, UTCTimestamp
 
 logger = logging.getLogger(__name__)
 
@@ -70,6 +70,9 @@ class StructureItem(Base):
 
     parent = relationship('StructureItem', backref=backref('children'),
                           remote_side='StructureItem.id')
+
+    date_added = Column('dateAdded', UTCTimestamp)
+    date_last_modify = Column('lastModified', UTCTimestamp)
 
     _places_p = bindparam('places_id', callable_=lambda: Base._roots.get('places', 1))
     _menu_p = bindparam('menu_id', callable_=lambda: Base._roots.get('menu', 2))
