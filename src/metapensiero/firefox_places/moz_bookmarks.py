@@ -29,6 +29,8 @@ from sqlalchemy.sql import (
 )
 
 
+from sqlalchemy.ext.associationproxy import association_proxy
+
 from . import Base, UTCTimestamp
 
 logger = logging.getLogger(__name__)
@@ -100,6 +102,8 @@ class StructureItem(Base):
 class Bookmark(StructureItem):
 
     place = relationship('Place', backref=backref('bookmarks'))
+    tag = relationship('Tag', remote_side='Tag.id')
+
     __mapper_args__ = {'polymorphic_identity': 'bookmark'}
 
 class Separator(StructureItem):
@@ -111,6 +115,8 @@ class Folder(StructureItem):
     __mapper_args__ = {'polymorphic_identity': 'folder'}
 
 class Tag(Folder):
+
+    places = association_proxy('children', 'place')
 
     __mapper_args__ = {'polymorphic_identity': 'tag'}
 
