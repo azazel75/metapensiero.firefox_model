@@ -28,9 +28,6 @@ from sqlalchemy.sql import (
     bindparam
 )
 
-from sqlalchemy.ext.declarative import (
-    declared_attr
-)
 
 from . import Base, UTCTimestamp
 
